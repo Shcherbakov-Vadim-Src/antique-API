@@ -174,7 +174,7 @@ app.get('/api/goods/:id', (req, res) => {         // годно
     })
 })
 
-app.put('/api/goods/:id', upload.single('avatar'), (req, res) => {                 // годно
+app.put('/api/goods/:id', upload.single('avatar'), (req, res) => {                 // годно для добавления и изменения
 
     const newGood = {
         category: req.body.category,
@@ -182,11 +182,12 @@ app.put('/api/goods/:id', upload.single('avatar'), (req, res) => {              
         price: req.body.price,
         about: req.body.about,
         photo: `http://localhost:3025/uploads/${fileNamePhoto}`,
-        dateOfPlacement: req.body.date,
-        dateOfSale: ''
+        dateOfPlacement: req.body.dateOfPlacement,
+        dateOfSale: req.body.dateOfSale
     };
 
     let check = Token.find({ token: req.body.token }).then((data) => {
+        
         if (data.length !== 0) {
             Good.updateOne({ _id: req.params.id }, newGood)
                 .then(() => {
@@ -201,11 +202,37 @@ app.put('/api/goods/:id', upload.single('avatar'), (req, res) => {              
     });
 })
 
+app.put('/api/goods/sale/:id', upload.single('avatar'), (req, res) => {                 // годно for sale
+
+    const newGood = {
+        category: req.body.category,
+        title: req.body.title,
+        price: req.body.price,
+        about: req.body.about,
+        photo: req.body.photo,
+        dateOfPlacement: req.body.dateOfPlacement,
+        dateOfSale: req.body.dateOfSale
+    };
+
+    let check = Token.find({ token: req.body.token }).then((data) => {
+        
+        if (data.length !== 0) {
+            Good.updateOne({ _id: req.params.id }, newGood)
+                .then(() => {
+                    res.status(204).send();
+                })
+                .catch((err) => {
+                    console.log(err);
+                })
+        } else {
+            res.status(401).json({ err: 'Can not find user' })
+        }
+    });
+})
 
 const tokens = [
 
 ];
-
 
 
 app.post('/token', (req, res) => {                                    // создание токена
