@@ -21,11 +21,9 @@ let storage = multer.diskStorage({
 })
 
 let upload = multer({ storage: storage })
-
 const Good = require('./Good');
-
+const Token = require('./Token');
 const app = express();
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
@@ -46,11 +44,120 @@ db.once('open', () => {
 // category: jewelry, accessories, icons, ancient values, household utensils
 
 
-
 app.get('/api/goods', (req, res) => {                 // годно
     Good.find().then((good) => {
         console.log(good);
         res.json(good);
+    })
+});
+
+app.get('/api/goods/archive', (req, res) => {                   // годно archive
+
+    let checkMonth = [];
+    let checkMonthSub = [];
+
+    const { month } = req.query;
+
+    Good.find().then((goods) => {
+
+        if (month === 'январь'){
+            checkMonth = goods.filter((good) => {
+                return good.dateOfSale > '2021.01.01';
+            });
+            checkMonthSub = checkMonth.filter((good) => {
+                return good.dateOfSale < '2021.02.01';
+            });
+            res.json(checkMonthSub);
+        } else if (month === 'февраль'){
+            checkMonth = goods.filter((good) => {
+                return good.dateOfSale > '2021.02.01';
+            });
+            checkMonthSub = checkMonth.filter((good) => {
+                return good.dateOfSale < '2021.03.01';
+            });
+            res.json(checkMonthSub);
+        } else if (month === 'март'){
+            checkMonth = goods.filter((good) => {
+                return good.dateOfSale > '2021.03.01';
+            });
+            checkMonthSub = checkMonth.filter((good) => {
+                return good.dateOfSale < '2021.04.01';
+            });
+            res.json(checkMonthSub);
+        } else if (month === 'апрель'){
+            checkMonth = goods.filter((good) => {
+                return good.dateOfSale > '2021.04.01';
+            });
+            checkMonthSub = checkMonth.filter((good) => {
+                return good.dateOfSale < '2021.05.01';
+            });
+            res.json(checkMonthSub);
+        } else if (month === 'май'){
+            checkMonth = goods.filter((good) => {
+                return good.dateOfSale > '2021.05.01';
+            });
+            checkMonthSub = checkMonth.filter((good) => {
+                return good.dateOfSale < '2021.06.01';
+            });
+            res.json(checkMonthSub);          
+        } else if (month === 'июнь'){
+            checkMonth = goods.filter((good) => {
+                return good.dateOfSale > '2021.06.01';
+            });
+            checkMonthSub = checkMonth.filter((good) => {
+                return good.dateOfSale < '2021.07.01';
+            });
+            res.json(checkMonthSub);
+        } else if (month === 'июль'){
+            checkMonth = goods.filter((good) => {
+                return good.dateOfSale > '2021.07.01';
+            });
+            checkMonthSub = checkMonth.filter((good) => {
+                return good.dateOfSale < '2021.08.01';
+            });
+            res.json(checkMonthSub);
+        } else if (month === 'август'){
+            checkMonth = goods.filter((good) => {
+                return good.dateOfSale > '2021.08.01';
+            });
+            checkMonthSub = checkMonth.filter((good) => {
+                return good.dateOfSale < '2021.09.01';
+            });
+            res.json(checkMonthSub);
+        } else if (month === 'сентябрь'){
+            checkMonth = goods.filter((good) => {
+                return good.dateOfSale > '2021.09.01';
+            });
+            checkMonthSub = checkMonth.filter((good) => {
+                return good.dateOfSale < '2021.10.01';
+            });
+            res.json(checkMonthSub);
+        } else if (month === 'октябрь'){
+            checkMonth = goods.filter((good) => {
+                return good.dateOfSale > '2021.10.01';
+            });
+            checkMonthSub = checkMonth.filter((good) => {
+                return good.dateOfSale < '2021.11.01';
+            });
+            res.json(checkMonthSub);
+        } else if (month === 'ноябрь'){
+            checkMonth = goods.filter((good) => {
+                return good.dateOfSale > '2021.11.01';
+            });
+            checkMonthSub = checkMonth.filter((good) => {
+                return good.dateOfSale < '2021.12.01';
+            });
+            res.json(checkMonthSub);
+        } else if (month === 'декабрь'){
+            checkMonth = goods.filter((good) => {
+                return good.dateOfSale > '2021.12.01';
+            });
+            checkMonthSub = checkMonth.filter((good) => {
+                return good.dateOfSale < '2022.01.01';
+            });
+            res.json(checkMonthSub);
+        }
+        
     })
 });
 
@@ -67,21 +174,7 @@ app.get('/api/goods/:id', (req, res) => {         // годно
     })
 })
 
-
-// app.put('/api/goods/:id', (req, res) => {                 // годно
-//     console.log(req.body);
-//     Good.updateOne({ _id: req.params.id }, req.body)
-//         .then(() => {
-//             res.status(204).send();
-//         })
-//         .catch((err) => {
-//             console.log(err);
-//         })
-// })
-
 app.put('/api/goods/:id', upload.single('avatar'), (req, res) => {                 // годно
-    
-    console.log('------->req.body', req.body);
 
     const newGood = {
         category: req.body.category,
@@ -93,30 +186,49 @@ app.put('/api/goods/:id', upload.single('avatar'), (req, res) => {              
         dateOfSale: ''
     };
 
-    console.log('------->newGood', newGood);
-
-    Good.updateOne({ _id: req.params.id }, newGood)
-        .then(() => {
-            res.status(204).send();
-        })
-        .catch((err) => {
-            console.log(err);
-        })
+    let check = Token.find({ token: req.body.token }).then((data) => {
+        if (data.length !== 0) {
+            Good.updateOne({ _id: req.params.id }, newGood)
+                .then(() => {
+                    res.status(204).send();
+                })
+                .catch((err) => {
+                    console.log(err);
+                })
+        } else {
+            res.status(401).json({ err: 'Can not find user' })
+        }
+    });
 })
 
 
 const tokens = [
-    {
-        // login: "admin",
-        // password: "12345"
-    }
+
 ];
+
+
 
 app.post('/token', (req, res) => {                                    // создание токена
     const { login, password } = req.body;
+
     if (login === 'admin' && password === '12345') {
+
         const newToken = uuidv4();
-        // console.log(newToken);
+
+        const objKey = {
+            login: login,
+            token: newToken
+        }
+
+        const key = new Token(objKey);
+        key.save((err) => {
+            if (err) {
+                console.log(err);
+                return res.status(500).send();
+            }
+            console.log('Success');
+            res.status(201).send();
+        });
         tokens.push({ login: login, token: newToken });
         res.json({ login: login, token: newToken });
     } else {
@@ -136,7 +248,28 @@ app.post('/addgoods', upload.single('avatar'), (req, res) => {
         dateOfSale: ''
     };
 
-    const good = new Good(newGood);
+    let check = Token.find({ token: req.body.token }).then((data) => {
+        if (data.length !== 0) {
+            const good = new Good(newGood);
+            good.save((err) => {
+                if (err) {
+                    console.log(err);
+                    return res.status(500).send();
+                }
+                console.log('Success');
+                res.status(201).send();
+            });
+        } else {
+            res.status(401).json({ err: 'Can not find user' })
+        }
+    });
+
+})
+
+
+app.post('/api/goods', (req, res) => {
+
+    const good = new Good(req.body);
     good.save((err) => {
         if (err) {
             console.log(err);
@@ -146,44 +279,41 @@ app.post('/addgoods', upload.single('avatar'), (req, res) => {
         res.status(201).send();
     });
 
-})
-
-
-app.post('/api/goods', (req, res) => {                                   // годно c использованием токена
-    const { token } = req.body;
-
-    // console.log(token);
-    const isLoginValid = tokens.find((t) => t.token === token);
-    console.log(token);
-    if (isLoginValid) {
-        const good = new Good(req.body);
-        good.save((err) => {
-            if (err) {
-                console.log(err);
-                return res.status(500).send();
-            }
-            console.log('Success');
-            res.status(201).send();
-        });
-    } else {
-        res.status(401).json({ error: 'The user does not exist' });
-    }
 });
 
 app.delete('/api/goods/:id', (req, res) => {                                        // с delete использованием токена
 
-    const { login, token } = req.body;
-    const isLoginValid = tokens.find((t) => t.token === token);
-    if (isLoginValid) {
+    const { token } = req.query;
 
-        Good.deleteOne({ _id: req.params.id })
-            .then(() => {
-                res.status(204).send();
-            })
-            .catch((err) => {
-                console.log(err);
-            })
-    }
+    let check = Token.find({ token: token }).then((data) => {
+
+        if (data.length !== 0) {
+            Good.deleteOne({ _id: req.params.id })
+                .then(() => {
+                    res.status(204).send();
+                })
+                .catch((err) => {
+                    console.log(err);
+                })
+        }
+    });
+
+});
+
+app.delete('/logout', (req, res) => {                               // log out
+
+    const { token } = req.query;
+
+    console.log('---------token------------>', token);
+
+    Token.deleteOne({ token: token })
+        .then(() => {
+            res.status(204).send();
+        })
+        .catch((err) => {
+            res.status(401).json({ err: 'Can not find user' })
+        })
+
 });
 
 
