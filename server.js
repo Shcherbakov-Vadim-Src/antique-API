@@ -6,6 +6,9 @@ const cors = require('cors');
 const multer = require('multer')
 // const upload = multer({ dest: 'uploads/' })
 
+"use strict";
+const nodemailer = require("nodemailer");
+
 let fileNamePhoto = '';
 
 let storage = multer.diskStorage({
@@ -60,7 +63,7 @@ app.get('/api/goods/archive', (req, res) => {                   // годно ar
 
     Good.find().then((goods) => {
 
-        if (month === 'январь'){
+        if (month === 'январь') {
             checkMonth = goods.filter((good) => {
                 return good.dateOfSale > '2021.01.01';
             });
@@ -68,7 +71,7 @@ app.get('/api/goods/archive', (req, res) => {                   // годно ar
                 return good.dateOfSale < '2021.02.01';
             });
             res.json(checkMonthSub);
-        } else if (month === 'февраль'){
+        } else if (month === 'февраль') {
             checkMonth = goods.filter((good) => {
                 return good.dateOfSale > '2021.02.01';
             });
@@ -76,7 +79,7 @@ app.get('/api/goods/archive', (req, res) => {                   // годно ar
                 return good.dateOfSale < '2021.03.01';
             });
             res.json(checkMonthSub);
-        } else if (month === 'март'){
+        } else if (month === 'март') {
             checkMonth = goods.filter((good) => {
                 return good.dateOfSale > '2021.03.01';
             });
@@ -84,7 +87,7 @@ app.get('/api/goods/archive', (req, res) => {                   // годно ar
                 return good.dateOfSale < '2021.04.01';
             });
             res.json(checkMonthSub);
-        } else if (month === 'апрель'){
+        } else if (month === 'апрель') {
             checkMonth = goods.filter((good) => {
                 return good.dateOfSale > '2021.04.01';
             });
@@ -92,15 +95,15 @@ app.get('/api/goods/archive', (req, res) => {                   // годно ar
                 return good.dateOfSale < '2021.05.01';
             });
             res.json(checkMonthSub);
-        } else if (month === 'май'){
+        } else if (month === 'май') {
             checkMonth = goods.filter((good) => {
                 return good.dateOfSale > '2021.05.01';
             });
             checkMonthSub = checkMonth.filter((good) => {
                 return good.dateOfSale < '2021.06.01';
             });
-            res.json(checkMonthSub);          
-        } else if (month === 'июнь'){
+            res.json(checkMonthSub);
+        } else if (month === 'июнь') {
             checkMonth = goods.filter((good) => {
                 return good.dateOfSale > '2021.06.01';
             });
@@ -108,7 +111,7 @@ app.get('/api/goods/archive', (req, res) => {                   // годно ar
                 return good.dateOfSale < '2021.07.01';
             });
             res.json(checkMonthSub);
-        } else if (month === 'июль'){
+        } else if (month === 'июль') {
             checkMonth = goods.filter((good) => {
                 return good.dateOfSale > '2021.07.01';
             });
@@ -116,7 +119,7 @@ app.get('/api/goods/archive', (req, res) => {                   // годно ar
                 return good.dateOfSale < '2021.08.01';
             });
             res.json(checkMonthSub);
-        } else if (month === 'август'){
+        } else if (month === 'август') {
             checkMonth = goods.filter((good) => {
                 return good.dateOfSale > '2021.08.01';
             });
@@ -124,7 +127,7 @@ app.get('/api/goods/archive', (req, res) => {                   // годно ar
                 return good.dateOfSale < '2021.09.01';
             });
             res.json(checkMonthSub);
-        } else if (month === 'сентябрь'){
+        } else if (month === 'сентябрь') {
             checkMonth = goods.filter((good) => {
                 return good.dateOfSale > '2021.09.01';
             });
@@ -132,7 +135,7 @@ app.get('/api/goods/archive', (req, res) => {                   // годно ar
                 return good.dateOfSale < '2021.10.01';
             });
             res.json(checkMonthSub);
-        } else if (month === 'октябрь'){
+        } else if (month === 'октябрь') {
             checkMonth = goods.filter((good) => {
                 return good.dateOfSale > '2021.10.01';
             });
@@ -140,7 +143,7 @@ app.get('/api/goods/archive', (req, res) => {                   // годно ar
                 return good.dateOfSale < '2021.11.01';
             });
             res.json(checkMonthSub);
-        } else if (month === 'ноябрь'){
+        } else if (month === 'ноябрь') {
             checkMonth = goods.filter((good) => {
                 return good.dateOfSale > '2021.11.01';
             });
@@ -148,7 +151,7 @@ app.get('/api/goods/archive', (req, res) => {                   // годно ar
                 return good.dateOfSale < '2021.12.01';
             });
             res.json(checkMonthSub);
-        } else if (month === 'декабрь'){
+        } else if (month === 'декабрь') {
             checkMonth = goods.filter((good) => {
                 return good.dateOfSale > '2021.12.01';
             });
@@ -157,7 +160,7 @@ app.get('/api/goods/archive', (req, res) => {                   // годно ar
             });
             res.json(checkMonthSub);
         }
-        
+
     })
 });
 
@@ -187,7 +190,7 @@ app.put('/api/goods/:id', upload.single('avatar'), (req, res) => {              
     };
 
     let check = Token.find({ token: req.body.token }).then((data) => {
-        
+
         if (data.length !== 0) {
             Good.updateOne({ _id: req.params.id }, newGood)
                 .then(() => {
@@ -215,7 +218,7 @@ app.put('/api/goods/sale/:id', upload.single('avatar'), (req, res) => {         
     };
 
     let check = Token.find({ token: req.body.token }).then((data) => {
-        
+
         if (data.length !== 0) {
             Good.updateOne({ _id: req.params.id }, newGood)
                 .then(() => {
@@ -342,6 +345,60 @@ app.delete('/logout', (req, res) => {                               // log out
         })
 
 });
+
+
+//----------------------------------------------------- nodemailer
+
+app.post('/api/mail', (req, res) => {
+
+    const mail = {
+        name: req.body.name,
+        post: req.body.post,
+        phone: req.body.phone,
+        massage: req.body.massage
+    };
+    
+    async function main() {
+        console.log('asdas', mail);
+        // Создать тестовую учетную запись службы SMTP из ethereal.email
+        // Требуется только в том случае, если у вас нет реального почтового аккаунта для тестирования
+        let testAccount = await nodemailer.createTestAccount();
+
+        // создать объект-transporter многократного использования с использованием транспорта SMTP по умолчанию
+        let transporter = nodemailer.createTransport({
+            host: "smtp.yandex.ru",
+            port: 465,
+            secure: true,
+            auth: {
+              user: "ahtungov.a@yandex.ru",
+              pass: "rumetyfwttixplpt"
+            }
+          });
+
+        // отправлять почту с определенным transporter объектом
+        let info = await transporter.sendMail({
+            from: 'ahtungov.a@yandex.ru', // адрес отправителя 👻  
+            to: 'ahtungov.a@yandex.ru', // список получателей или массив адресов электронной почты получателей, которые будут отображаться в поле To :
+            subject: "Hello ✔", // тема письма
+            text: `отправил ${mail.name} (${mail.post}), телефон ${mail.phone}, содержание: ${mail.massage}`, // версия сообщения в виде открытого текста в 
+            html: `<b>${mail.massage}</b>`, // html body    HTML-версия сообщения в виде строки Unicode, буфер
+        });
+
+        console.log('------mail.massage---------', mail.massage);
+
+        console.log("Message sent: %s", info.messageId);
+        // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
+
+        // Предварительный просмотр доступен только при отправке через учетную запись Ethereal
+        console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+        // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
+    }
+
+    main().catch(console.error);
+
+});
+
+//----------------------------------------------------- nodemailer
 
 
 app.listen(3025, () => {
