@@ -179,15 +179,19 @@ app.get('/api/goods/:id', (req, res) => {         // годно
 
 app.put('/api/goods/:id', upload.single('avatar'), (req, res) => {                 // годно для добавления и изменения
 
+    console.log('--------------req.body', req.body);
+
     const newGood = {
         category: req.body.category,
         title: req.body.title,
         price: req.body.price,
         about: req.body.about,
         photo: `http://localhost:3025/uploads/${fileNamePhoto}`,
-        dateOfPlacement: req.body.dateOfPlacement,
-        dateOfSale: req.body.dateOfSale
+        dateOfPlacement: req.body.date,
+        dateOfSale: ''
     };
+
+    console.log('--------------newGood', newGood);
 
     let check = Token.find({ token: req.body.token }).then((data) => {
 
@@ -379,9 +383,9 @@ app.post('/api/mail', (req, res) => {
         let info = await transporter.sendMail({
             from: 'ahtungov.a@yandex.ru', // адрес отправителя 👻  
             to: 'ahtungov.a@yandex.ru', // список получателей или массив адресов электронной почты получателей, которые будут отображаться в поле To :
-            subject: "Hello ✔", // тема письма
+            subject: "Hello ✔ 👻", // тема письма 
             text: `отправил ${mail.name} (${mail.post}), телефон ${mail.phone}, содержание: ${mail.massage}`, // версия сообщения в виде открытого текста в 
-            html: `<b>${mail.massage}</b>`, // html body    HTML-версия сообщения в виде строки Unicode, буфер
+            html: `<b>отправил ${mail.name} (${mail.post}), телефон ${mail.phone}, содержание: ${mail.massage}</b>`, // html body    HTML-версия сообщения в виде строки Unicode, буфер
         });
 
         console.log('------mail.massage---------', mail.massage);
