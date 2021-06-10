@@ -164,7 +164,7 @@ app.get('/api/goods/archive', (req, res) => {                   // годно ar
 });
 
 
-app.get('/api/goods/:id', (req, res) => {         // годно
+app.get('/api/goods/:id', (req, res) => {         // готово
     // const id = req.params.id;
     // console.log('------>', req.params.id);
     Good.find({ _id: req.params.id }).then((data) => {
@@ -176,7 +176,7 @@ app.get('/api/goods/:id', (req, res) => {         // годно
     })
 })
 
-app.put('/api/goods/:id', upload.single('avatar'), (req, res) => {                 // годно для добавления и изменения
+app.put('/api/goods/:id', upload.single('avatar'), (req, res) => {                 // готово для изменения
 
     console.log('--------------req.body', req.body);
 
@@ -208,7 +208,7 @@ app.put('/api/goods/:id', upload.single('avatar'), (req, res) => {              
     });
 })
 
-app.put('/api/goods/sale/:id', upload.single('avatar'), (req, res) => {                 // годно for sale
+app.put('/api/goods/sale/:id', upload.single('avatar'), (req, res) => {                 // готово for sale
 
     const newGood = {
         category: req.body.category,
@@ -316,7 +316,7 @@ app.post('/api/goods', (req, res) => {
 
 });
 
-app.delete('/api/goods/:id', (req, res) => {                                        // с delete использованием токена
+app.delete('/api/goods/:id', (req, res) => {                                        // delete использованием токена
 
     const { token } = req.query;
 
@@ -365,11 +365,7 @@ app.post('/api/mail', (req, res) => {
     
     async function main() {
         console.log('asdas', mail);
-        // Создать тестовую учетную запись службы SMTP из ethereal.email
-        // Требуется только в том случае, если у вас нет реального почтового аккаунта для тестирования
-        let testAccount = await nodemailer.createTestAccount();
 
-        // создать объект-transporter многократного использования с использованием транспорта SMTP по умолчанию
         let transporter = nodemailer.createTransport({
             host: "smtp.yandex.ru",
             port: 465,
@@ -380,23 +376,16 @@ app.post('/api/mail', (req, res) => {
             }
           });
 
-        // отправлять почту с определенным transporter объектом
         let info = await transporter.sendMail({
-            from: 'ahtungov.a@yandex.ru', // адрес отправителя 👻  
-            to: 'ahtungov.a@yandex.ru', // список получателей или массив адресов электронной почты получателей, которые будут отображаться в поле To :
-            subject: "Hello ✔ 👻", // тема письма 
-            text: `отправил ${mail.name} (${mail.post}), телефон ${mail.phone}, содержание: ${mail.massage}`, // версия сообщения в виде открытого текста в 
-            html: `<b>отправил ${mail.name} (${mail.post}), телефон ${mail.phone}, содержание: ${mail.massage}</b>`, // html body    HTML-версия сообщения в виде строки Unicode, буфер
+            from: 'ahtungov.a@yandex.ru', // адрес отправителя 
+            to: 'ahtungov.a@yandex.ru', // список получателей 
+            subject: "Hello ✔ 👻", // тема  
+            text: `отправил ${mail.name} (${mail.post}), телефон ${mail.phone}, содержание: ${mail.massage}`, // версия сообщения 
+            html: `<b>отправил ${mail.name} (${mail.post}), телефон ${mail.phone}, содержание: ${mail.massage}</b>`, // HTML-версия сообщения 
         });
 
-        console.log('------mail.massage---------', mail.massage);
-
-        console.log("Message sent: %s", info.messageId);
-        // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
-
-        // Предварительный просмотр доступен только при отправке через учетную запись Ethereal
+       // Предварительный просмотр доступен только при отправке через учетную запись Ethereal
         console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
-        // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
     }
 
     main().catch(console.error);
