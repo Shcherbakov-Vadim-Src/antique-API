@@ -165,8 +165,6 @@ app.get('/api/goods/archive', (req, res) => {                   // годно ar
 
 
 app.get('/api/goods/:id', (req, res) => {         // готово
-    // const id = req.params.id;
-    // console.log('------>', req.params.id);
     Good.find({ _id: req.params.id }).then((data) => {
         if (data) {
             res.status(200).json(data);
@@ -395,6 +393,6 @@ app.post('/api/mail', (req, res) => {
 //----------------------------------------------------- nodemailer
 
 
-app.listen(3025, () => {
+app.listen(process.env.PORT || 3025, () => {
     console.log('server on 3025 port is connected');
 })
