@@ -46,7 +46,6 @@ db.once('open', () => {
 
 // category: jewelry, accessories, icons, ancient values, household utensils
 
-
 app.get('/api/goods', (req, res) => {                 // годно
     Good.find().then((good) => {
         console.log(good);
@@ -281,6 +280,8 @@ app.post('/addgoods', upload.single('avatar'), (req, res) => {
         dateOfPlacement: req.body.date,
         dateOfSale: ''
     };
+
+    console.log('newGood--------------->', newGood);
 
     let check = Token.find({ token: req.body.token }).then((data) => {
         if (data.length !== 0) {
