@@ -176,7 +176,7 @@ app.get('/api/goods/:id', (req, res) => {         // готово
 
 app.put('/api/goods/:id', upload.single('avatar'), (req, res) => {                 // готово для изменения
 
-    console.log('--------------req.body', req.body);
+    console.log('--------------req.body--->', req.body);
 
     const newGood = {
         category: req.body.category,
@@ -188,7 +188,7 @@ app.put('/api/goods/:id', upload.single('avatar'), (req, res) => {              
         dateOfSale: ''
     };
 
-    console.log('--------------newGood', newGood);
+    console.log('--------------newGood-->', newGood);
 
     let check = Token.find({ token: req.body.token }).then((data) => {
 
@@ -290,7 +290,7 @@ app.post('/addgoods', upload.single('avatar'), (req, res) => {
                     return res.status(500).send();
                 }
                 console.log('Success');
-                res.status(201).send();
+                res.status(201).json({ status: 'OK' });
             });
         } else {
             res.status(401).json({ err: 'Can not find user' })
