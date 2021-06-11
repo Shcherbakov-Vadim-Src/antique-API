@@ -183,7 +183,7 @@ app.put('/api/goods/:id', upload.single('avatar'), (req, res) => {              
         title: req.body.title,
         price: req.body.price,
         about: req.body.about,
-        photo: `http://localhost:3025/uploads/${fileNamePhoto}`,
+        photo: `https://antique-api.herokuapp.com/uploads/${fileNamePhoto}`,
         dateOfPlacement: req.body.date,
         dateOfSale: ''
     };
@@ -274,7 +274,7 @@ app.post('/addgoods', upload.single('avatar'), (req, res) => {
         title: req.body.title,
         price: req.body.price,
         about: req.body.about,
-        photo: `http://localhost:3025/uploads/${fileNamePhoto}`,
+        photo: `https://antique-api.herokuapp.com/uploads/${fileNamePhoto}`,
         dateOfPlacement: req.body.date,
         dateOfSale: ''
     };
