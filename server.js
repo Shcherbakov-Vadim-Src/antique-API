@@ -279,7 +279,7 @@ app.post('/addgoods', upload.single('avatar'), (req, res) => {
         dateOfSale: ''
     };
 
-    console.log('newGood--------------->', newGood);
+    console.log('-------------newGood--------------->', newGood);
 
     let check = Token.find({ token: req.body.token }).then((data) => {
         if (data.length !== 0) {
